@@ -23,28 +23,49 @@ import libreware.thatnight.user.Car
 import libreware.thatnight.user.User
 
 class Involved {
+    /**
+     * The car the user uses for the event if he uses one.
+     */
     Car car
+
+    /**
+     * The available seats
+     */
     int availableSeats
+
+    /**
+     * The meeting point for the car departure
+     */
     String meetingPoint
 
-    Role role
+    /**
+     * Roles of the user in the event
+     */
+    Collection<Role> role = new ArrayList<Role>()
 
     static belongsTo = [user:User, event:Event ]
 
     static constraints = {
         user (nullable: false, blank:false)
         event (nullable: false, blank: false)
-        car (nullable: true, blank: true)
-        meetingPoint(nullable: true, blank: true)
+        car (nullable: false, blank: true)
+        meetingPoint(nullable: false, blank: true)
         role(nullable : false, blank: false, validator:{
-            value, obj ->
-                if (role == Role.DRIVER) return (car != null)
+            role, obj ->
+                if (role.contains(Role.DRIVER)) return (car != null)
                 return true
         })
-        availableSeats(validator:{
+        availableSeats(nullable:false, blank: true, validator:{
             value, obj ->
                 return value < obj.car.capacity //ensure that the number of available seats is lesser than the car capacity
         })
-        // TODO : Conditional constraint according to ROLE (Role.DRIVER must have a non null car etc.)
+    }
+
+    public addRole(Role role){
+        this.role.add(role)
+    }
+
+    public removeRole(Role role){
+        this.role.remove(role)
     }
 }

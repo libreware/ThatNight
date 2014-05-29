@@ -83,6 +83,12 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
+// SimpleSec configuration
+// maximum number of attempts
+max.login.attempts=5
+// time to wait after "max.login.attempts" failures (in minutes)
+waiting.time=5
+
 environments {
     development {
         grails.logging.jul.usebridge = true

@@ -49,7 +49,7 @@ class Event {
     static hasMany = [involved:Involved]
 
     static constraints = {
-        title(size:3..50, blank:false, nullable:false, matches: "^[a-zA-Z][a-zA-Z ]+", unique: true)
+        title(size:3..50, blank:false, nullable:false, matches: "^[a-zA-Z0-9][a-zA-Z0-9 ]+", unique: true)
         address(size: 2..100, blank: false,nullable:false, matches: "^[a-zA-Z0-9][a-zA-Z0-9 ]+")
         dateBeginEvent(nullable:false, min: new Date())
         description(size: 2..300, blank: false, matches: "^[a-zA-Z0-9][a-zA-Z0-9 ]+")

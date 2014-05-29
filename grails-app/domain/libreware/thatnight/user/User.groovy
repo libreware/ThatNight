@@ -49,25 +49,28 @@ class User {
     String hashedPassword
 
     /**
-     * The password before it is hashed
+     * The password before it is hashed (is not stored in the database, just used fot the validator)
      */
     String password
 
+    /**
+     * Confirm password
+     */
+    String confirmPassword
+
     static hasMany = [cars:Car, involvements:Involved]
 
-    static transients = ['password']
+    static transients = ['password','confirmPassword']
 
     static constraints = {
-        loginName(size: 2..15, blank: false, matches: "[a-zA-Z0-9 ]+", unique: true)
-        firstName(size: 2..20, blank: false, matches: "[a-zA-Z -]+")
-        lastName(size: 2..20, blank: false, matches: "[a-zA-Z -]+")
+        loginName(size: 2..15, blank: false, matches: "[a-zA-Z0-9][a-zA-Z0-9 ]+", unique: true)
+        firstName(size: 2..20, blank: false, matches: "[a-zA-Z][a-zA-Z -]+")
+        lastName(size: 2..20, blank: false, matches: "[a-zA-Z][a-zA-Z -]+")
         email(email:true, nullable:false, blank: false, unique: true)
         hashedPassword(nullable:false, blank: false)
-        password(minSize: 5, validator: { confirm, obj, errors ->
-            if (!(obj.password == confirm)) errors.rejectValue('password', 'noMatch')
+        password  (blank:false, size:5..15, matches:/[\S]+/, validator:{ val, obj ->
+            if (obj.password != obj.confirmPassword)
+                return 'user.password.match.error'
         })
     }
-
-
-
 }
